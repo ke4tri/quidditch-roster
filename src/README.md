@@ -1,26 +1,25 @@
-# The Quidditch Roster
+# Quidditch Roster
 
-### Description
+## Description
+
 This project is an exploration of SASS styling by creating a Quiddich roster for Hogwarts. Once loaded the user has the ability to filter the list of players by the house they belong to.
 
-![mainview](./screenshots/mainview.png)
+## Screenshots
 
-### Technologies Used
-* SASS
-* Webpack
-* Axios
-* ES6 Modules
+<img width="1437" alt="screen shot 2018-11-08 at 5 13 47 pm" src="https://user-images.githubusercontent.com/16019344/48233128-b7437700-e379-11e8-89ad-027ff15baad8.png">
+<img width="1440" alt="screen shot 2018-11-08 at 5 13 54 pm" src="https://user-images.githubusercontent.com/16019344/48233131-b9a5d100-e379-11e8-9ba6-1d142da8638f.png">
 
-### How to run this app
-To run this app you will need two terminals - one serving up the json data and one running the app.
+## Technologies Used
+SASS
+Webpack
+Axios
+ES6 Modules
 
-1.  Configure Firebase
-* In the db folder rename `apiKeys.json.example`
-* globally install json-server: `npm install -g json-server`
-* use npm to run the json: `npm run data`
-
-2.  Serve up the app
-* At the root of the project: `npm install`
-* `npm start`
-
-### Contributors
+## How to run this app
+You will need a firebase account and a new project
+1. Configure Firebase
+• In the DB folder, rename `apiKeys.json.example` to `apiKeys.json`
+• Add in the config object from your firebase project
+2. Serve up the app
+• At the root of the project: ```npm install```
+• ```npm start```
