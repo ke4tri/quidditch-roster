@@ -1,29 +1,101 @@
 import axios from 'axios';
 
-const getAllPlayersFromDb = () => axios.get('http://localhost:3003/players');
+import apiKeys from '../../db/apiKeys.json';
 
-const getPlayersByTeam = teamId => new Promise((resolve, reject) => {
+const baseUrl = apiKeys.firebaseKeys.databaseURL;
+
+const getAllPlayersFromDb = () => new Promise((resolve, reject) => {
   axios
-    .get('http://localhost:3003/players')
-    .then((data) => {
-      const allPlayers = data.data;
-      const correctPlayers = allPlayers.filter(x => x.teamId === teamId);
-      resolve(correctPlayers);
+    .get(`${baseUrl}/players.json`)
+    .then((result) => {
+      // problem:  result is an object and I need it to be an array
+      const allPlayersObject = result.data; // this is calling only the data from the axios call
+      const allPlayersArray = [];
+      if (allPlayersObject != null) {
+        Object.keys(allPlayersObject).forEach((playerId) => {
+          const newPlayer = allPlayersObject[playerId]; // bracket notation bc its calling strings
+          newPlayer.id = playerId;
+          allPlayersArray.push(newPlayer);
+        });
+      }
+      console.log('array?', allPlayersArray);
+      resolve(allPlayersArray);
     })
     .catch((err) => {
       reject(err);
     });
 });
 
-const getAllTeamsFromDb = () => axios.get('http://localhost:3003/teams');
+const getPlayersByTeam = teamId => new Promise((resolve, reject) => {
+  axios
+    .get(`${baseUrl}/players.json?orderBy="teamId"&equalTo="${teamId}"`) // filters teamId
+    .then((result) => {
+      const allPlayersObject = result.data; // this is calling only the data from the axios call
+      const allPlayersArray = [];
+      if (allPlayersObject != null) {
+        Object.keys(allPlayersObject).forEach((playerId) => {
+          const newPlayer = allPlayersObject[playerId]; // bracket notation bc its calling strings
+          newPlayer.id = playerId;
+          allPlayersArray.push(newPlayer);
+        });
+      }
+      console.log('array?', allPlayersArray);
+      resolve(allPlayersArray);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+});
 
-const getAllPositionsFromDb = () => axios.get('http://localhost:3003/positions');
+const getAllTeamsFromDb = () => new Promise((resolve, reject) => {
+  axios
+    .get(`${baseUrl}/teams.json`)
+    .then((result) => {
+      // problem:  result is an object and I need it to be an array
+      const allTeamsObject = result.data; // this is calling only the data from the axios call
+      const allTeamsArray = [];
+      if (allTeamsObject != null) {
+        Object.keys(allTeamsObject).forEach((teamId) => {
+          const newTeam = allTeamsObject[teamId]; // bracket notation bc its calling strings
+          newTeam.id = teamId;
+          allTeamsArray.push(newTeam);
+        });
+      }
+      console.log('array?', allTeamsArray);
+      resolve(allTeamsArray);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+});
+
+const getAllPositionsFromDb = () => new Promise((resolve, reject) => {
+  axios
+    .get(`${baseUrl}/positions.json`)
+    .then((result) => {
+      // problem:  result is an object and I need it to be an array
+      const allPositionsObject = result.data; // this is calling only the data from the axios call
+      const allPositionsArray = [];
+      if (allPositionsObject != null) {
+        Object.keys(allPositionsObject).forEach((positionId) => {
+          const newPosition = allPositionsObject[positionId];
+          newPosition.id = positionId;
+          allPositionsArray.push(newPosition);
+        });
+      }
+      console.log('array?', allPositionsArray);
+      resolve(allPositionsArray);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+});
 
 const getFullPlayerInfo = players => Promise.all([getAllTeamsFromDb(), getAllPositionsFromDb()])
   .then((dataArray) => {
     const playersFromDb = players;
-    const teamsFromDb = dataArray[0].data;
-    const positionsFromDb = dataArray[1].data;
+    const teamsFromDb = dataArray[0];
+    const positionsFromDb = dataArray[1];
     const newPlayers = [];
     playersFromDb.forEach((player) => {
       const newPlayer = player;
